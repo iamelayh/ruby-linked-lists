@@ -1,5 +1,5 @@
 class LinkedList
-    attr_acccessor :head
+    attr_accessor :head
 
     def initialize
         @head = nil
@@ -22,7 +22,7 @@ end
     private
 
     class Node
-     attr_acccessor :value, :next_node
+     attr_accessor :value, :next_node
      def initialize(value = nil, next_node = nil)
         @value = value
         @next_node = next_node
