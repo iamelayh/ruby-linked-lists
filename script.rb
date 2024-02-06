@@ -1,6 +1,6 @@
 class LinkedList
     attr_accessor :head
-
+    @@total_nodes
     def initialize
         @head = nil
     end
@@ -26,11 +26,24 @@ def prepend(data)
    @head = new_node
 end
 
+def size
+
+   count = 0
+   curr_node = @head
+   while curr_node
+      count += 1
+      curr_node = curr_node.next_node
+   end
+
+   count
+end
+
 
     private
 
     class Node
      attr_accessor :value, :next_node
+
      def initialize(value = nil, next_node = nil)
         @value = value
         @next_node = next_node
