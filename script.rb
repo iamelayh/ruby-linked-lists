@@ -19,6 +19,14 @@ def append(data)
       end
 end
 
+def prepend(data)
+   first_node = @head
+   new_node = Node.new(data)
+   new_node.next_node = first_node
+   @head = new_node
+end
+
+
     private
 
     class Node
