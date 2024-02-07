@@ -88,6 +88,17 @@ class LinkedList
 
   end
 
+  def find(data, curr_node = @head, index = 0)
+   return nil if curr_node.nil?
+
+   if curr_node.value == data
+      return index
+   else
+
+      find(data, curr_node.next_node, index + 1)
+   end
+
+  end
   private
 
   class Node
@@ -99,6 +110,12 @@ class LinkedList
     end
   end
 end
+
+
+my_list = LinkedList.new
+my_list.append(1)
+my_list.append(2)
+my_list.append(3)
 
 
 
