@@ -70,10 +70,20 @@ class LinkedList
         while curr_node.next_node && curr_node.next_node.next_node
          curr_node = curr_node.next_node
         end
-
     deleted_node = curr_node.next_node
     curr_node.next_node = nil
     return deleted_node.value
+   end
+
+  end
+
+  def contains?(data, curr_node = @head)
+     return false if curr_node.nil?
+
+   if curr_node.value == data
+      true
+   else
+      contains?(data, curr_node.next_node)
    end
 
   end
@@ -89,11 +99,6 @@ class LinkedList
     end
   end
 end
-
-linklist = LinkedList.new
-linklist.append(1)
-linklist.append(2)
-linklist.append(3)
 
 
 
