@@ -65,8 +65,6 @@ class LinkedList
         return :HEAD_REMOVED
      else
         curr_node = @head
-
-        # 1 > 2 > 3 > 4 > nil
         while curr_node.next_node && curr_node.next_node.next_node
          curr_node = curr_node.next_node
         end
@@ -94,12 +92,25 @@ class LinkedList
    if curr_node.value == data
       return index
    else
-
       find(data, curr_node.next_node, index + 1)
    end
 
   end
-  private
+
+  def to_s(curr_node = @head)
+
+    result = ''
+
+    while curr_node
+       result += "#{curr_node.value} -> "
+       curr_node = curr_node.next_node
+    end
+
+    result += "nil"
+    result
+  end
+
+    private
 
   class Node
     attr_accessor :value, :next_node
@@ -116,6 +127,8 @@ my_list = LinkedList.new
 my_list.append(1)
 my_list.append(2)
 my_list.append(3)
+
+
 
 
 
