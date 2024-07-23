@@ -1,134 +1,176 @@
-class LinkedList
-  attr_accessor :head
+# Require the Node class
+require_relative 'node'
 
+# Define the LinkedList class
+class LinkedList
+  # Initialize the linked list with an empty head, size 0, and a tail (which is not actually used)
   def initialize
     @head = nil
+    @size = 0
   end
 
-  def append(data)
+  # Append a new node with the given value to the end of the list
+  def append(value)
+  # If the value is nil, return nil immediately
+  return nil if value.nil?
+
+  # If the list is empty (i.e., @head is nil), create a new node with the given value and set it as the head
+  if @head.nil?
+    @head = Node.new(value)
+  else
+    # If the list is not empty, traverse the list to find the last node
+    current = @head
+    while current.next_node
+      # Move to the next node until we reach the last node
+      current = current.next_node
+    end
+    # Create a new node with the given value and append it to the last node
+    current.next_node = Node.new(value)
+  end
+  # Increment the size of the list by 1
+  @size += 1
+  end
+
+  # Prepend a new node with the given value to the beginning of the list
+  def prepend(value)
+    return nil if value.nil?
     if @head.nil?
-      @head = Node.new(data)
+      # If the list is empty, set the head to the new node
+      @head = add_node(value)
     else
-      curr_node = @head
-      while curr_node.next_node
-        curr_node = curr_node.next_node
-      end
-      curr_node.next_node = Node.new(data)
+      # Otherwise, create a new node and set it as the new head, pointing to the previous head
+      previous_head = @head
+      new_head = Node.new(value)
+      @size += 1
+      new_head.next_node = previous_head
+      @head = new_head
     end
   end
 
-  def prepend(data)
-    first_node = @head
-    new_node = Node.new(data)
-    new_node.next_node = first_node
-    @head = new_node
-  end
-
+  # Return the size of the list
   def size
-    count = 0
-    curr_node = @head
-    while curr_node
-      count += 1
-      curr_node = curr_node.next_node
-    end
-    count
+    @size
   end
 
+  # Return the head of the list
   def head
     @head
   end
 
+  # Return the tail of the list (i.e., the last node)
   def tail
     return nil if @head.nil?
-
-    curr_node = @head
-    while curr_node.next_node
-      curr_node = curr_node.next_node
+    current = @head
+    while current.next_node
+      current = current.next_node
     end
-    curr_node
+    current
   end
 
+  # Return the node at the given index
   def at(index)
-    return @head if index <= 0
-    return IndexError, "Index out of range" if index > self.size
-    curr_node = @head
+    return @head if index.negative?
+    return IndexError, "Index out of range" if index > @size
+    current = @head
     index.times do
-      curr_node = curr_node.next_node
+      current = current.next_node
     end
-    curr_node
+    current
   end
 
+  # Remove the last node from the list and return its value
   def pop
-     if @head.next_node.nil?
-        deleted_node = @head
-        @head = nil
-        return :HEAD_REMOVED
-     else
-        curr_node = @head
-        while curr_node.next_node && curr_node.next_node.next_node
-         curr_node = curr_node.next_node
-        end
-    deleted_node = curr_node.next_node
-    curr_node.next_node = nil
-    return deleted_node.value
-   end
+    if @head.next_node.nil?
+      # If the list only has one node, remove it and return a special value
+      deleted_node = @head
+      @size -= 1
+      @head = nil
+    else
+      # Otherwise, traverse the list to find the last node and remove it
+      current = @head
+      while current.next_node.next_node && current.next_node
+        current = current.next_node
+      end
 
+      node_to_delete = current.next_node
+      current.next_node = nil
+      @size -= 1
+      return node_to_delete.value
+    end
   end
 
-  def contains?(data, curr_node = @head)
-     return false if curr_node.nil?
-
-   if curr_node.value == data
-      true
-   else
-      contains?(data, curr_node.next_node)
-   end
-
+  # Check if the list contains a node with the given value
+  def contains?(value)
+    return nil if value.nil?
+    current = @head
+    while current
+      return true if current.value == value # Note: this should be `==` instead of `=`
+      current = current.next_node
+    end
+    false
   end
 
-  def find(data, curr_node = @head, index = 0)
-   return nil if curr_node.nil?
-
-   if curr_node.value == data
+  # Find the index of the first node with the given value
+  def find(value, current = @head, index = 0)
+    return nil if current.nil?
+    if current.value == value
       return index
-   else
-      find(data, curr_node.next_node, index + 1)
-   end
-
+    else
+      find(value, current = current.next_node, index += 1)
+    end
   end
 
-  def to_s(curr_node = @head)
-
-    result = ''
-
-    while curr_node
-       result += "#{curr_node.value} -> "
-       curr_node = curr_node.next_node
+  # Convert the list to a string representation
+  def to_string
+    res = ''
+    current = @head
+    while current
+      res << "#{current.value} -> "
+      current = current.next_node
     end
-
-    result += "nil"
-    result
+    res << 'nil'
+    res
   end
 
-    private
+  # Insert a new node with the given value at the specified index
+def insert_at(value, index, curr_node = @head, curr_index = 0)
+  return nil if value.nil? || index.negative? || index > @size
 
-  class Node
-    attr_accessor :value, :next_node
-
-    def initialize(value = nil, next_node = nil)
-      @value = value
-      @next_node = next_node
-    end
+  if index == curr_index
+    # If the index matches, insert a new node
+    new_node = Node.new
+    new_node.new_node = curr_nod.next_node
+    curr_node.next_node = new_node
+  else
+    # Otherwise, recursively call insert_at with the next node and incremented index
+    insert_at(value, index, curr_node.next_node, curr_index + 1)
   end
 end
 
+    def to_string
+        res = ''
+        current = @head
+        while current
+            res << "#{current.value} -> "
+            current = current.next_node
+        end
+        res << 'nil'
+        res
+    end
 
-my_list = LinkedList.new
-my_list.append(1)
-my_list.append(2)
-my_list.append(3)
+    def insert_at(value, index, curr_node = @head, curr_index = 0)
+        return nil if value.nil? || index.negative? || index > @size
 
+        if index = curr_index
+            curr_node.value = value
+        else
+           insert_at(value, index, curr_node = curr_node.next_node , curr_index += 1)
+        end
+    end
+end
 
-
-
-
+linked_list = LinkedList.new
+linked_list.append("A")
+linked_list.append("B")
+linked_list.append("C")
+puts linked_list.to_string
